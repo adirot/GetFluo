@@ -18,6 +18,7 @@ for (i = 0; i <=posnumber-1; i++) {
 path=getDirectory("results directory");
 run("Set Measurements...", "area mean min center median kurtosis area_fraction stack display redirect=None decimal=3");
 for (pos = 0; pos <=posnumber-1; pos++) {
+	red=newArray(); green=newArray(); blue=newArray();
 	myFile=poslist[pos];
 	//mesured photos opener
 	run("Image Sequence...", "open=myFile number=Number starting=start increment=jump file="+top+" "+ " sort");
@@ -34,6 +35,7 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 		n=0;
 		d=1.5*Size;
 		m=getResult("Slice", i);
+		red[i] = random*255; blue[i] = random*255; green[i] = random*255;
 		if(m == 1) {
 			//setting the first partical
 	   		j=i+1;
@@ -51,7 +53,7 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 	 			   	
 	   				if (D<=d) {
 	   					roiManager("Select", k);
-	   					Roi.setStrokeColor(color);
+	   					Roi.setStrokeColor(red[i],green[i],blue[i]);
 	   					setResult(ex, n,getResult("Mean", k) );
 	   					setResult(dx, n,getResult("Area", k) );
 	   					d=sqrt(	(abs(x1-x))^2+abs(y1-y)^2);
