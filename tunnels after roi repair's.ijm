@@ -39,8 +39,10 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 		if(m == 1) {
 			//setting the first partical
 	   		j=i+1;
-	   		ex="mean"+j;
-	   		dx="area"+j;
+	   		meanNo="mean"+j;
+	   		areaNo="area"+j;
+	   		xNo="x"+j;
+	   		yNo="y"+j;
 	   		color=random*255;
 	   		x1= getResult('XM', i);
 	    	y1= getResult('YM', i);
@@ -50,12 +52,13 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 	   				x= getResult('XM', k);
 	 			   	y= getResult('YM', k);
 	 			   	D=sqrt((abs(x1-x))^2+abs(y1-y)^2);
-	 			   	
 	   				if (D<=d) {
 	   					roiManager("Select", k);
 	   					Roi.setStrokeColor(red[i],green[i],blue[i]);
-	   					setResult(ex, n,getResult("Mean", k) );
-	   					setResult(dx, n,getResult("Area", k) );
+	   					setResult(meanNo, n,getResult("Mean", k) );
+	   					setResult(areaNo, n,getResult("Area", k) );
+	   					setResult(xNo, n,getResult("XM", k) );
+	   					setResult(yNo, n,getResult("YM", k) );
 	   					d=sqrt(	(abs(x1-x))^2+abs(y1-y)^2);
 	   					x2=x;
 	   					y2=y;
@@ -73,7 +76,7 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 		}
 	}
 	//saving the mean and area
-	//IJ.deleteRows(nSlices,nResults-1)
+	IJ.deleteRows(nSlices,nResults-1)
 	saveAs("Results",path+photo+".csv");
 	roiManager("Save", path+photo+".zip");
 	//making ram free
