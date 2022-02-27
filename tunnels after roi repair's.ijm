@@ -25,50 +25,51 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 	photo = getTitle();
 	run("Subtract Background...", "rolling=50 stack");
 	//analyze
-	open(myroi);
 	//measure YFP by roi
 	selectWindow(photo);
+	open(myroi);
+	roiManager("Sort");
+	run("Select All");
 	roiManager("Measure");
 	//trace
-	j=0; Size=50;
-	for (i = 0; i <= nResults-1; i++) {
-		n=0;
-		d=1.5*Size;
-		m=getResult("Slice", i);
-		red[i] = random*255; blue[i] = random*255; green[i] = random*255;
-		if(m == 1) {
+	particlenumber=0; Size=50;
+	for (particle = 0; particle <= nResults-1; particle++) {
+		slicenum=0;
+		minD=Size*0.1;
+		red[particle] = random*255; blue[particle] = random*255; green[particle] = random*255;
+		if(getResult("Slice", particle)== 1) {
 			//setting the first partical
-	   		j=i+1;
-	   		meanNo="mean"+j;
-	   		areaNo="area"+j;
-	   		xNo="x"+j;
-	   		yNo="y"+j;
+	   		particlenumber=particle+1;
+	   		meanNo="mean"+particlenumber;
+	   		areaNo="area"+particlenumber;
+	   		xNo="x"+particlenumber;
+	   		yNo="y"+particlenumber;
 	   		color=random*255;
-	   		x1= getResult('XM', i);
-	    	y1= getResult('YM', i);
+	   		firstx= getResult('XM', particle);
+	    	firsty= getResult('YM', particle);
 	    	//tracking
-	   		for (k = 0; k <= nResults-1; k++) {
-	   			if((getResult("Slice", k)==n+1)) {
-	   				x= getResult('XM', k);
-	 			   	y= getResult('YM', k);
-	 			   	D=sqrt((abs(x1-x))^2+abs(y1-y)^2);
-	   				if (D<=d) {
-	   					roiManager("Select", k);
-	   					Roi.setStrokeColor(red[i],green[i],blue[i]);
-	   					setResult(meanNo, n,getResult("Mean", k) );
-	   					setResult(areaNo, n,getResult("Area", k) );
-	   					setResult(xNo, n,getResult("XM", k) );
-	   					setResult(yNo, n,getResult("YM", k) );
-	   					d=sqrt(	(abs(x1-x))^2+abs(y1-y)^2);
+	   		for (current = 0;  current< nResults; current++) {
+	   			if((getResult("Slice", current)==slicenum+1)) {
+	   				x= getResult('XM', current);
+	 			   	y= getResult('YM', current);
+	 			   	currentD=sqrt((abs(firstx-x))^2+abs(firsty-y)^2);
+	   				if (currentD<=minD) {
+	   					roiManager("Select",current );
+	   					Roi.setStrokeColor(red[particle],green[particle],blue[particle]);
+	   					setResult(meanNo, slicenum,getResult("Mean", current) );
+	   					setResult(areaNo, slicenum,getResult("Area", current) );
+	   					setResult(xNo, slicenum,getResult("XM", current) );
+	   					setResult(yNo, slicenum,getResult("YM", current) );
+	   					minD=sqrt(	(abs(firstx-x))^2+abs(firsty-y)^2);
 	   					x2=x;
 	   					y2=y;
 	   				}
-	   				if (k+1<nResults) {
-	   					if(getResult("Slice", k+1)==n+2){
-	  	 					x1=x2;
-	   						y1=y2;
-	   						n=n+1;
-	   						d=Size;	
+	   				if (current+1<nResults) {
+	   					if(getResult("Slice", current+1)==slicenum+2){
+	  	 					firsx=x2;
+	   						firsty=y2;
+	   						slicenum=slicenum+1;
+	   						minD=Size*0.1;	
 	   					}
 	   				}	
 	   			}
@@ -78,7 +79,6 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 	//saving the mean and area
 	IJ.deleteRows(nSlices,nResults-1)
 	saveAs("Results",path+photo+".csv");
-	roiManager("Save", path+photo+".zip");
 	//making ram free
 	//run("Close All");
 }
