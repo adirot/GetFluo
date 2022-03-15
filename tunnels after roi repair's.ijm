@@ -1,4 +1,4 @@
-//choose parameters for data analysis
+ds//choose parameters for data analysis
 #@ Integer(label="nuber of pos") posnumber
 #@ String(label="file name (YFP/GFP/cheery/else)") top
 #@ Integer(label="first image") startYFP
