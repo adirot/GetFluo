@@ -46,7 +46,7 @@ for (pos = 0; pos <=posnumber-1; pos++) {
 	   		yNo="y"+particlenumber;
 	   		color=random*255;
 	   		firstx= getResult('XM', particle);
-	    	firsty= getResult('YM', particle);
+	    		firsty= getResult('YM', particle);
 	    	//tracking
 	   		for (current = 0;  current< nResults; current++) {
 	   			if((getResult("Slice", current)==slicenum+1)) {
